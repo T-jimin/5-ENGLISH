@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>크래프트 보카 - 마인크래프트풍 초등 5학년 영어 단어 모험</title>
+  <meta name="description" content="초등학교 5학년 영어 단어를 마인크래프트 미니게임, 1분 타임어택, 보스전, 명예의 전당으로 재미있게 학습하는 웹앱">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="mc-header">
+    <div class="mc-logo">
+      <span class="mc-logo-icon">⛏️</span>
+      <span>CRAFT VOCA</span>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="mc-nav">
+      <button class="mc-nav-btn active" data-view="student-hub">🎮 학생 로비</button>
+      <button class="mc-nav-btn" data-view="student-study">📖 단어 익히기</button>
+      <button class="mc-nav-btn" data-view="hall-of-fame">🏆 명예의 전당</button>
+      <button class="mc-nav-btn" data-view="teacher">👨‍🏫 선생님 페이지</button>
+    </nav>
+
+    <!-- User Profile & Stats -->
+    <div class="user-stats-bar">
+      <div class="stat-chip">
+        <span id="user-profile-avatar">🟩</span>
+        <strong id="user-profile-name" class="mc-text-gold">탐험가</strong>
+      </div>
+      <div class="stat-chip">
+        <span>💰</span>
+        <span id="user-profile-gold" class="mc-text-gold">50</span> Gold
+      </div>
+      <div class="stat-chip">
+        <span>⛏️</span>
+        <span id="user-profile-clears" class="mc-text-emerald">0</span> 클리어
+      </div>
+      <button id="btn-toggle-sound" class="mc-btn-sm mc-btn-stone">🔊 소리 켬</button>
+    </div>
+  </header>
+
+  <!-- Main App Container -->
+  <main class="app-container">
+
+    <!-- ==================== VIEW 1: STUDENT HUB (LOBBY) ==================== -->
+    <section id="view-student-hub" class="app-view">
+      <!-- Status & Login Toolbar -->
+      <div class="mc-box-stone d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2>🗡️ 초등 5학년 영어 단어 모험에 오신 것을 환영합니다!</h2>
+          <p class="text-muted mt-1">미니게임을 플레이하여 골드를 모으고, 엔더 드래곤 보스에게 도전하세요!</p>
+        </div>
+        <div class="flex-center gap-2">
+          <span id="firebase-status-badge" class="mc-badge-wood">💾 로컬 모드</span>
+          <button id="btn-google-login" class="mc-btn mc-btn-gold mc-btn-sm">🌐 Google 로그인</button>
+          <button id="btn-anon-login" class="mc-btn mc-btn-stone mc-btn-sm">👤 닉네임 설정</button>
+          <button id="btn-open-firebase-config" class="mc-btn mc-btn-wood mc-btn-sm" title="Firebase Key 설정">⚙️ 설정</button>
+        </div>
+      </div>
+
+      <!-- Avatar Selector Bar -->
+      <div class="mc-box-wood mb-4">
+        <h3 class="mb-2">👤 나의 마인크래프트 캐릭터 선택</h3>
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="mc-btn mc-btn-stone btn-select-avatar" data-avatar="steve">🟩 스티브</button>
+          <button class="mc-btn mc-btn-stone btn-select-avatar" data-avatar="alex">🟧 알렉스</button>
+          <button class="mc-btn mc-btn-stone btn-select-avatar" data-avatar="diamond">💎 다이아 용사</button>
+          <button class="mc-btn mc-btn-stone btn-select-avatar" data-avatar="creeper">🧨 크리퍼</button>
+          <button class="mc-btn mc-btn-stone btn-select-avatar" data-avatar="enderman">👁️ 엔더맨</button>
+        </div>
+      </div>
+
+      <!-- Main Hub Cards Grid -->
+      <div class="hub-grid">
+        <!-- Card 1: Study Mode -->
+        <div class="hub-card">
+          <div>
+            <div class="hub-card-icon">📖</div>
+            <h3 class="mc-text-gold">영어 단어 익히기</h3>
+            <p class="text-muted mt-2">플래시카드와 미국식 발음(TTS)으로 5학년 필수 단어를 먼저 연습하세요.</p>
+          </div>
+          <button id="hub-btn-study" class="mc-btn mc-btn-gold mt-4">학습 시작하기 ➔</button>
+        </div>
+
+        <!-- Card 2: 1-Min Game 1 - Listening/Speaking -->
+        <div class="hub-card">
+          <div>
+            <div class="hub-card-icon">🎧</div>
+            <h3 class="mc-text-emerald">듣기말하기 미니게임</h3>
+            <span class="mc-badge-gold">⏱️ 1분 타임어택</span>
+            <p class="text-muted mt-2">영어 발음을 듣고 알맞은 광석 블록을 채굴하여 골드를 획득하세요!</p>
+          </div>
+          <button id="hub-btn-game-listen" class="mc-btn mc-btn-emerald mt-4">게임 플레이 ➔</button>
+        </div>
+
+        <!-- Card 3: 1-Min Game 2 - Reading -->
+        <div class="hub-card">
+          <div>
+            <div class="hub-card-icon">📖</div>
+            <h3 class="mc-text-emerald">스피드 읽기 미니게임</h3>
+            <span class="mc-badge-gold">⏱️ 1분 타임어택</span>
+            <p class="text-muted mt-2">몬스터 카드가 떨어지기 전에 정확한 뜻을 읽고 퇴치하세요!</p>
+          </div>
+          <button id="hub-btn-game-read" class="mc-btn mc-btn-emerald mt-4">게임 플레이 ➔</button>
+        </div>
+
+        <!-- Card 4: 1-Min Game 3 - Writing -->
+        <div class="hub-card">
+          <div>
+            <div class="hub-card-icon">✏️</div>
+            <h3 class="mc-text-emerald">크래프트 쓰기 미니게임</h3>
+            <span class="mc-badge-gold">⏱️ 1분 타임어택</span>
+            <p class="text-muted mt-2">조합대에서 알파벳 블록을 순서대로 조합하여 영어 단어를 완성하세요!</p>
+          </div>
+          <button id="hub-btn-game-write" class="mc-btn mc-btn-emerald mt-4">게임 플레이 ➔</button>
+        </div>
+
+        <!-- Card 5: Boss Raid Dungeon -->
+        <div class="hub-card" style="border-color: var(--mc-gold); background: linear-gradient(180deg, #3d1b04, #1a0a00);">
+          <div>
+            <div class="hub-card-icon">🐉</div>
+            <h3 class="mc-text-gold">보스 도전: 엔더 드래곤</h3>
+            <span class="mc-badge-stone">입장료: 500 Gold</span>
+            <p class="text-muted mt-2">듣기/읽기/쓰기 믹스 10문제를 풀고 명예의 전당에 도전하세요!</p>
+          </div>
+          <button id="hub-btn-boss" class="mc-btn mc-btn-gold mc-btn-large mt-4">🐉 보스전 도전하기!</button>
+        </div>
+
+        <!-- Card 6: Hall of Fame -->
+        <div class="hub-card">
+          <div>
+            <div class="hub-card-icon">🏆</div>
+            <h3 class="mc-text-gold">명예의 전당</h3>
+            <p class="text-muted mt-2">골드 상위 10위 및 미니게임 클리어 상위 10위 랭킹을 확인하세요.</p>
+          </div>
+          <button class="mc-btn mc-btn-stone mt-4" data-view="hall-of-fame">🏆 랭킹 보기 ➔</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: STUDENT STUDY MODE ==================== -->
+    <section id="view-student-study" class="app-view d-none">
+      <div class="mc-box-stone mb-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h2>📖 초등 5학년 영어 단어 익히기</h2>
+          <p class="text-muted">카드를 클릭하여 뒤집거나 [발음 듣기] 버튼을 눌러보세요.</p>
+        </div>
+        <div>
+          <span id="study-progress-span" class="mc-badge-gold">0 / 0</span>
+          <button class="mc-btn mc-btn-stone mc-btn-sm" data-view="student-hub">🏠 로비로</button>
+        </div>
+      </div>
+
+      <!-- Flashcard Wrapper -->
+      <div class="flashcard-wrapper">
+        <div id="study-flashcard" class="flashcard">
+          <!-- Front Face -->
+          <div class="card-face front">
+            <span id="study-category-badge" class="mc-badge-wood mb-2">카테고리</span>
+            <h1 id="study-word-text" class="display-3 mc-text-gold my-2">word</h1>
+            <p id="study-phonetic-text" class="text-muted font-italic">/phonetic/</p>
+            <button id="btn-study-tts" class="mc-btn mc-btn-gold mc-btn-sm mt-3">🔊 미국식 발음 듣기</button>
+            <small class="text-muted mt-4">(카드를 클릭하면 뜻이 나옵니다)</small>
+          </div>
+          <!-- Back Face -->
+          <div class="card-face back">
+            <h2 id="study-meaning-text" class="display-4 mc-text-emerald my-2">한국어 뜻</h2>
+            <p id="study-example-text" class="mc-example-text mt-3">"Example sentence"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Control Buttons -->
+      <div class="d-flex justify-content-center gap-3 mt-4">
+        <button id="btn-study-prev" class="mc-btn mc-btn-stone mc-btn-large">◀ 이전 단어</button>
+        <button id="btn-study-shuffle" class="mc-btn mc-btn-wood mc-btn-large">🔀 단어 섞기</button>
+        <button id="btn-study-next" class="mc-btn mc-btn-gold mc-btn-large">다음 단어 ▶</button>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: TEACHER PORTAL ==================== -->
+    <section id="view-teacher" class="app-view d-none">
+      <div class="mc-box-wood mb-4 d-flex justify-content-between align-items-center">
+        <div>
+          <h2>👨‍🏫 선생님 페이지 (영어 단어 및 과제 관리)</h2>
+          <p class="text-muted">학생들이 학습할 초등 5학년 영어 단어를 자유롭게 추가, 수정, 삭제하세요.</p>
+        </div>
+        <div class="flex-center gap-2">
+          <button id="btn-print-flashcards" class="mc-btn mc-btn-gold mc-btn-sm">🖨️ 단어 카드 인쇄</button>
+          <button id="btn-export-words" class="mc-btn mc-btn-stone mc-btn-sm">📥 단어 JSON 저장</button>
+          <button id="btn-reset-default-words" class="mc-btn mc-btn-danger mc-btn-sm">🔄 5학년 기본 복원</button>
+        </div>
+      </div>
+
+      <!-- Add New Word Form -->
+      <div class="mc-box-stone mb-4">
+        <h3>➕ 새 영어 단어 등록하기</h3>
+        <form id="teacher-add-word-form" class="mt-3">
+          <div class="d-flex gap-2 flex-wrap mb-2">
+            <input type="text" id="new-word-input" placeholder="영어 단어 (예: weather)" class="mc-btn mc-btn-stone" style="flex: 1;" required>
+            <input type="text" id="new-meaning-input" placeholder="한국어 뜻 (예: 날씨)" class="mc-btn mc-btn-stone" style="flex: 1;" required>
+            <input type="text" id="new-category-input" placeholder="카테고리 (예: 날씨/계절)" class="mc-btn mc-btn-stone" style="flex: 1;">
+          </div>
+          <div class="d-flex gap-2 flex-wrap mb-3">
+            <input type="text" id="new-phonetic-input" placeholder="발음 기호 (예: ˈweðər)" class="mc-btn mc-btn-stone" style="flex: 1;">
+            <input type="text" id="new-example-input" placeholder="예문 (예: How is the weather today?)" class="mc-btn mc-btn-stone" style="flex: 2;">
+          </div>
+          <button type="submit" class="mc-btn mc-btn-gold">➕ 단어장에 추가하기</button>
+        </form>
+      </div>
+
+      <!-- Words Search & Table -->
+      <div class="mc-box-stone">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div class="d-flex gap-2 align-items-center">
+            <select id="teacher-category-filter" class="mc-btn mc-btn-stone"></select>
+            <input type="text" id="teacher-search-input" placeholder="🔍 단어/뜻 검색..." class="mc-btn mc-btn-stone">
+          </div>
+          <span id="teacher-word-count" class="mc-badge-gold">0개 단어</span>
+        </div>
+
+        <div style="overflow-x: auto;">
+          <table class="mc-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>영어 단어 / 발음</th>
+                <th>한국어 뜻</th>
+                <th>카테고리</th>
+                <th>예문</th>
+                <th>관리</th>
+              </tr>
+            </thead>
+            <tbody id="teacher-words-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: HALL OF FAME ==================== -->
+    <section id="view-hall-of-fame" class="app-view d-none">
+      <div class="mc-box-gold mb-4 text-center">
+        <h1 class="display-3 text-warning">🏆 명예의 전당 (Top 10)</h1>
+        <p class="text-muted">최고의 골드 수집가 및 미니게임 클리어 챔피언 목록입니다!</p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="d-flex justify-content-center gap-3 mb-4">
+        <button id="btn-hall-tab-gold" class="mc-btn mc-btn-gold mc-btn-large active">💰 골드 TOP 10</button>
+        <button id="btn-hall-tab-clears" class="mc-btn mc-btn-emerald mc-btn-large">⛏️ 클리어 횟수 TOP 10</button>
+      </div>
+
+      <!-- Rankings List Container -->
+      <div id="hall-of-fame-list" class="max-w-600 mx-auto" style="max-width: 650px; margin: 0 auto;">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== MODAL 1: MINI-GAME SYSTEM ==================== -->
+  <div id="minigame-modal" class="mc-modal-overlay d-none">
+    <div class="mc-modal-content">
+      <!-- Game Top Bar -->
+      <div class="d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom">
+        <h2 id="minigame-title" class="mc-text-gold">🎮 미니게임</h2>
+        <div class="d-flex gap-3 align-items-center">
+          <span class="mc-badge-stone">점수: <strong id="minigame-score" class="mc-text-gold">0</strong></span>
+          <span class="mc-badge-stone">콤보: <strong id="minigame-combo" class="mc-text-emerald">x0</strong></span>
+          <span class="mc-badge-gold">⏱️ <strong id="minigame-timer">60초</strong></span>
+          <button id="btn-minigame-quit" class="mc-btn mc-btn-danger mc-btn-sm" title="중간 종료 (골드 미지급)">🛑 중간 종료</button>
+        </div>
+      </div>
+
+      <!-- Game Content Area -->
+      <div id="minigame-content">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: BOSS RAID SYSTEM ==================== -->
+  <div id="boss-modal" class="mc-modal-overlay d-none">
+    <div class="mc-modal-content" style="border-color: var(--mc-gold);">
+      <!-- Boss Header & HP Bar -->
+      <div class="boss-header-hp mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+          <h2 class="mc-text-gold">🐉 엔더 드래곤 레이드</h2>
+          <div class="d-flex gap-2 align-items-center">
+            <span class="mc-badge-stone">나의 체력: <strong id="boss-player-hearts">💖💖💖</strong></span>
+            <span id="boss-question-num" class="mc-badge-gold">문제 1 / 10</span>
+          </div>
+        </div>
+        <div class="hp-bar-outer">
+          <div id="boss-hp-bar" class="hp-bar-inner"></div>
+        </div>
+        <small id="boss-hp-text" class="text-muted mt-1 d-block">100 / 100 HP</small>
+      </div>
+
+      <!-- Dragon Avatar Icon -->
+      <div class="text-center mb-3">
+        <div id="boss-dragon-avatar" class="display-1">🐉</div>
+      </div>
+
+      <!-- Boss Question Container -->
+      <div id="boss-question-container">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 3: FIREBASE CONFIG MODAL ==================== -->
+  <div id="firebase-config-modal" class="mc-modal-overlay d-none">
+    <div class="mc-modal-content">
+      <h2 class="mc-text-gold mb-2">⚙️ Firebase 설정 (Firestore & Google 로그인 연동)</h2>
+      <p class="text-muted mb-4">Firebase Console에서 발급받은 Web SDK Config 정보를 입력하세요.</p>
+
+      <div class="mc-box-stone">
+        <label class="d-block mb-1">API Key:</label>
+        <input type="text" id="fb-api-key" placeholder="AIzaSy..." class="mc-btn mc-btn-stone w-100 mb-3" style="width:100%;">
+
+        <label class="d-block mb-1">Project ID:</label>
+        <input type="text" id="fb-project-id" placeholder="my-craft-voca" class="mc-btn mc-btn-stone w-100 mb-3" style="width:100%;">
+
+        <label class="d-block mb-1">Auth Domain (선택):</label>
+        <input type="text" id="fb-auth-domain" placeholder="my-craft-voca.firebaseapp.com" class="mc-btn mc-btn-stone w-100 mb-3" style="width:100%;">
+
+        <label class="d-block mb-1">App ID (선택):</label>
+        <input type="text" id="fb-app-id" placeholder="1:123456789:web:abcdef" class="mc-btn mc-btn-stone w-100 mb-3" style="width:100%;">
+      </div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4">
+        <button id="btn-close-firebase-config" class="mc-btn mc-btn-stone">취소</button>
+        <button id="btn-save-firebase-config" class="mc-btn mc-btn-gold">💾 키 저장 및 새로고침</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
